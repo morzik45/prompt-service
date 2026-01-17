@@ -45,4 +45,7 @@ export interface AppSettings {
   lmTemperature: number;
   lmTopP: number;
   lmTopK: number;
+  lmUseTemperature: number;
+  lmUseTopP: number;
+  lmUseTopK: number;
 }

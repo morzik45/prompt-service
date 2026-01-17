@@ -27,10 +27,20 @@ export function settingsRouter(db: DB) {
         lmTemperature: z.number().min(0).max(2).optional(),
         lmTopP: z.number().min(0).max(1).optional(),
         lmTopK: z.number().int().min(0).optional(),
+        lmUseTemperature: z.union([z.boolean(), z.number().int().min(0).max(1)]).optional(),
+        lmUseTopP: z.union([z.boolean(), z.number().int().min(0).max(1)]).optional(),
+        lmUseTopK: z.union([z.boolean(), z.number().int().min(0).max(1)]).optional(),
       }),
       req.body
     );
-    const updated = updateSettings(db, body);
+    const normalized = {
+      ...body,
+      lmUseTemperature:
+        body.lmUseTemperature === undefined ? undefined : body.lmUseTemperature ? 1 : 0,
+      lmUseTopP: body.lmUseTopP === undefined ? undefined : body.lmUseTopP ? 1 : 0,
+      lmUseTopK: body.lmUseTopK === undefined ? undefined : body.lmUseTopK ? 1 : 0,
+    };
+    const updated = updateSettings(db, normalized);
     res.json(updated);
   });
 

@@ -2,6 +2,7 @@ import * as React from "react";
 import { api } from "@/lib/api";
 import type { AppSettings, JoinMode } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -116,7 +117,7 @@ export default function SettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>LM Studio</CardTitle>
+            <CardTitle>LLM API</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <Input
@@ -134,38 +135,78 @@ export default function SettingsPage() {
               value={settings.lmModel ?? ""}
               onChange={(event) => setSettings({ ...settings, lmModel: event.target.value })}
             />
-            <div className="grid gap-3 md:grid-cols-3">
-              <Input
-                type="number"
-                step="0.1"
-                min="0"
-                max="2"
-                placeholder="temperature"
-                value={String(settings.lmTemperature)}
-                onChange={(event) =>
-                  setSettings({ ...settings, lmTemperature: Number.parseFloat(event.target.value) || 0 })
-                }
-              />
-              <Input
-                type="number"
-                step="0.05"
-                min="0"
-                max="1"
-                placeholder="top_p"
-                value={String(settings.lmTopP)}
-                onChange={(event) => setSettings({ ...settings, lmTopP: Number.parseFloat(event.target.value) || 0 })}
-              />
-              <Input
-                type="number"
-                step="1"
-                min="0"
-                placeholder="top_k"
-                value={String(settings.lmTopK)}
-                onChange={(event) => setSettings({ ...settings, lmTopK: Number.parseInt(event.target.value, 10) || 0 })}
-              />
+            <div className="space-y-2 rounded-lg border border-ink/10 bg-white/60 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Параметры генерации</p>
+              <div className="grid gap-3 md:grid-cols-3">
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-ink/70">Temperature</label>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      checked={Boolean(settings.lmUseTemperature)}
+                      onChange={(event) =>
+                        setSettings({ ...settings, lmUseTemperature: event.target.checked ? 1 : 0 })
+                      }
+                    />
+                    <Input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="2"
+                      placeholder="0.2"
+                      value={String(settings.lmTemperature)}
+                      disabled={!settings.lmUseTemperature}
+                      onChange={(event) =>
+                        setSettings({ ...settings, lmTemperature: Number.parseFloat(event.target.value) || 0 })
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-ink/70">Top P</label>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      checked={Boolean(settings.lmUseTopP)}
+                      onChange={(event) => setSettings({ ...settings, lmUseTopP: event.target.checked ? 1 : 0 })}
+                    />
+                    <Input
+                      type="number"
+                      step="0.05"
+                      min="0"
+                      max="1"
+                      placeholder="0.9"
+                      value={String(settings.lmTopP)}
+                      disabled={!settings.lmUseTopP}
+                      onChange={(event) =>
+                        setSettings({ ...settings, lmTopP: Number.parseFloat(event.target.value) || 0 })
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-ink/70">Top K</label>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      checked={Boolean(settings.lmUseTopK)}
+                      onChange={(event) => setSettings({ ...settings, lmUseTopK: event.target.checked ? 1 : 0 })}
+                    />
+                    <Input
+                      type="number"
+                      step="1"
+                      min="0"
+                      placeholder="40"
+                      value={String(settings.lmTopK)}
+                      disabled={!settings.lmUseTopK}
+                      onChange={(event) =>
+                        setSettings({ ...settings, lmTopK: Number.parseInt(event.target.value, 10) || 0 })
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-ink/50">Если параметр отключён, он не передаётся в API.</p>
             </div>
             <Button variant="secondary" onClick={() => updateSettings(settings)}>
-              Сохранить LM настройки
+              Сохранить LLM настройки
             </Button>
           </CardContent>
         </Card>

@@ -13,6 +13,9 @@ export const DEFAULT_SETTINGS = {
   lmTemperature: 0.2,
   lmTopP: 0.9,
   lmTopK: 40,
+  lmUseTemperature: 1,
+  lmUseTopP: 1,
+  lmUseTopK: 1,
 };
 
 export function initDb(dbPath?: string): DB {
@@ -67,7 +70,10 @@ export function initDb(dbPath?: string): DB {
       lmModel TEXT,
       lmTemperature REAL NOT NULL,
       lmTopP REAL NOT NULL,
-      lmTopK INTEGER NOT NULL
+      lmTopK INTEGER NOT NULL,
+      lmUseTemperature INTEGER NOT NULL,
+      lmUseTopP INTEGER NOT NULL,
+      lmUseTopK INTEGER NOT NULL
     );
   `);
 
@@ -77,12 +83,15 @@ export function initDb(dbPath?: string): DB {
   ensureColumn(db, "AppSettings", "lmTemperature", "REAL NOT NULL DEFAULT 0.2");
   ensureColumn(db, "AppSettings", "lmTopP", "REAL NOT NULL DEFAULT 0.9");
   ensureColumn(db, "AppSettings", "lmTopK", "INTEGER NOT NULL DEFAULT 40");
+  ensureColumn(db, "AppSettings", "lmUseTemperature", "INTEGER NOT NULL DEFAULT 1");
+  ensureColumn(db, "AppSettings", "lmUseTopP", "INTEGER NOT NULL DEFAULT 1");
+  ensureColumn(db, "AppSettings", "lmUseTopK", "INTEGER NOT NULL DEFAULT 1");
 
   const row = db.prepare("SELECT id FROM AppSettings WHERE id = 1").get();
   if (!row) {
     db.prepare(
-      `INSERT INTO AppSettings (id, promptOutputPath, joinMode, lmBaseUrl, lmApiKey, lmModel, lmTemperature, lmTopP, lmTopK)
-       VALUES (@id, @promptOutputPath, @joinMode, @lmBaseUrl, @lmApiKey, @lmModel, @lmTemperature, @lmTopP, @lmTopK)`
+      `INSERT INTO AppSettings (id, promptOutputPath, joinMode, lmBaseUrl, lmApiKey, lmModel, lmTemperature, lmTopP, lmTopK, lmUseTemperature, lmUseTopP, lmUseTopK)
+       VALUES (@id, @promptOutputPath, @joinMode, @lmBaseUrl, @lmApiKey, @lmModel, @lmTemperature, @lmTopP, @lmTopK, @lmUseTemperature, @lmUseTopP, @lmUseTopK)`
     ).run(DEFAULT_SETTINGS);
   }
 
@@ -113,7 +122,10 @@ export function updateSettings(db: DB, patch: Partial<typeof DEFAULT_SETTINGS>) 
          lmModel = @lmModel,
          lmTemperature = @lmTemperature,
          lmTopP = @lmTopP,
-         lmTopK = @lmTopK
+         lmTopK = @lmTopK,
+         lmUseTemperature = @lmUseTemperature,
+         lmUseTopP = @lmUseTopP,
+         lmUseTopK = @lmUseTopK
      WHERE id = 1`
   ).run(next);
   return next;

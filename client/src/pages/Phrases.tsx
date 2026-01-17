@@ -141,6 +141,8 @@ export default function PhrasesPage() {
   const [translationInput, setTranslationInput] = React.useState("");
   const [translationOutput, setTranslationOutput] = React.useState("");
   const defaultTranslationMode: "ru2en" = "ru2en";
+  const [isTranslating, setIsTranslating] = React.useState(false);
+  const translationRequestId = React.useRef(0);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -335,15 +337,24 @@ export default function PhrasesPage() {
       push({ title: "Введите текст", tone: "error" });
       return;
     }
+    const requestId = translationRequestId.current + 1;
+    translationRequestId.current = requestId;
+    setIsTranslating(true);
     try {
       const res = await api.lmRequest({ mode, text: translationInput });
-      setTranslationOutput(res.text);
+      if (translationRequestId.current === requestId) {
+        setTranslationOutput(res.text);
+        setIsTranslating(false);
+      }
     } catch (error) {
-      push({
-        title: "Ошибка LM Studio",
-        description: error instanceof Error ? error.message : "Не удалось получить ответ",
-        tone: "error",
-      });
+      if (translationRequestId.current === requestId) {
+        setIsTranslating(false);
+        push({
+          title: "Ошибка LLM",
+          description: error instanceof Error ? error.message : "Не удалось получить ответ",
+          tone: "error",
+        });
+      }
     }
   };
 
@@ -501,6 +512,7 @@ export default function PhrasesPage() {
               <Button variant="outline" onClick={() => runTranslation("improve")}>
                 Improve EN
               </Button>
+              {isTranslating && <span className="text-xs font-semibold text-ink/60">Запрос выполняется…</span>}
             </div>
             <Textarea placeholder="Результат" value={translationOutput} readOnly />
             <div className="flex flex-wrap gap-2">

@@ -33,9 +33,9 @@ export function lmRouter(db: DB) {
           { role: "system", content: systemPrompt },
           { role: "user", content: body.text },
         ],
-        temperature: settings.lmTemperature,
-        top_p: settings.lmTopP,
-        top_k: settings.lmTopK,
+        ...(settings.lmUseTemperature ? { temperature: settings.lmTemperature } : {}),
+        ...(settings.lmUseTopP ? { top_p: settings.lmTopP } : {}),
+        ...(settings.lmUseTopK ? { top_k: settings.lmTopK } : {}),
       };
 
       const url = `${settings.lmBaseUrl.replace(/\/$/, "")}/chat/completions`;

@@ -64,7 +64,10 @@ export function backupRouter(db: DB) {
                  lmModel = @lmModel,
                  lmTemperature = @lmTemperature,
                  lmTopP = @lmTopP,
-                 lmTopK = @lmTopK
+                 lmTopK = @lmTopK,
+                 lmUseTemperature = @lmUseTemperature,
+                 lmUseTopP = @lmUseTopP,
+                 lmUseTopK = @lmUseTopK
              WHERE id = 1`
           ).run(settings);
         }
