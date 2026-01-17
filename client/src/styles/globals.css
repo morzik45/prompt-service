@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  font-family: "Source Sans 3", sans-serif;
+}
+
+.app-shell {
+  background: radial-gradient(circle at top left, rgba(242, 178, 99, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 10%, rgba(78, 107, 87, 0.2), transparent 45%),
+    #f6f1e7;
+}
+
+.card-surface {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(28, 27, 32, 0.2);
+  border-radius: 999px;
+}
