@@ -188,12 +188,12 @@ export default function BuilderPage() {
   };
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[1.1fr_1.4fr_1fr]">
+    <div className="grid gap-4 xl:grid-cols-[1.1fr_1.4fr_1fr]">
       <Card>
         <CardHeader>
           <CardTitle>Фразы</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3">
           <div className="space-y-2">
             <Input placeholder="Поиск по фразам" value={search} onChange={(event) => setSearch(event.target.value)} />
             <label className="flex items-center gap-2 text-sm text-ink/70">
@@ -221,7 +221,7 @@ export default function BuilderPage() {
           </div>
           <div className="space-y-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">Фразы</p>
-            <div className="scrollbar-thin max-h-[360px] space-y-2 overflow-y-auto pr-1">
+            <div className="scrollbar-thin max-h-[320px] space-y-2 overflow-y-auto pr-1">
               {filteredPhrases.map((phrase) => (
                 <button
                   key={phrase.id}
@@ -242,7 +242,7 @@ export default function BuilderPage() {
         <CardHeader>
           <CardTitle>Текущая сборка</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3">
           <div className="flex flex-wrap gap-2">
             {[",", ".", "and"].map((token) => (
               <Button key={token} variant="secondary" size="sm" onClick={() => addToken(token)}>
@@ -293,7 +293,7 @@ export default function BuilderPage() {
         <CardHeader>
           <CardTitle>Preview</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3">
           <div className="rounded-lg border border-ink/10 bg-white/70 p-3 text-sm text-ink">
             {preview || "Пока пусто"}
           </div>

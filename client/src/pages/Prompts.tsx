@@ -58,9 +58,9 @@ export default function PromptsPage() {
       <CardHeader>
         <CardTitle>Сохранённые промпты</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {prompts.map((prompt) => (
-          <div key={prompt.id} className="space-y-2 rounded-lg border border-ink/10 bg-white/70 p-4">
+          <div key={prompt.id} className="space-y-2 rounded-lg border border-ink/10 bg-white/70 p-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <Input
                 placeholder="Описание (опционально)"

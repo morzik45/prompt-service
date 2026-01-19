@@ -9,13 +9,13 @@ export const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
 Card.displayName = "Card";
 
 export const CardHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("border-b border-ink/10 px-5 py-4", className)} {...props} />
+  <div className={cn("border-b border-ink/10 px-4 py-3", className)} {...props} />
 );
 
 export const CardTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h3 className={cn("font-display text-base font-semibold", className)} {...props} />
+  <h3 className={cn("font-display text-sm font-semibold", className)} {...props} />
 );
 
 export const CardContent = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("px-5 py-4", className)} {...props} />
+  <div className={cn("px-4 py-3", className)} {...props} />
 );

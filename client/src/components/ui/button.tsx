@@ -14,9 +14,9 @@ const buttonVariants = cva(
         accent: "bg-moss text-white hover:bg-moss/90",
       },
       size: {
-        sm: "h-8 px-3",
-        md: "h-10 px-4",
-        lg: "h-12 px-6 text-base",
+        sm: "h-7 px-2 text-xs",
+        md: "h-9 px-3",
+        lg: "h-11 px-5 text-base",
       },
     },
     defaultVariants: {

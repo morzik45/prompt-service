@@ -16,18 +16,24 @@ export default function HistoryPage() {
 
   const loadData = React.useCallback(async () => {
     const [historyData, settings] = await Promise.all([api.getHistory(50), api.getSettings()]);
-    setHistory(historyData);
     setJoinMode(settings.joinMode);
+    const deduped: PromptHistory[] = [];
+    const seen = new Set<string>();
+    for (const item of historyData) {
+      const tokens = getTokensForMode(item, settings.joinMode);
+      const key = tokens.length ? tokens.join("|") : item.content.trim();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      deduped.push(item);
+    }
+    setHistory(deduped);
   }, []);
 
   React.useEffect(() => {
     loadData().catch((error) => push({ title: "Ошибка", description: error.message, tone: "error" }));
   }, [loadData, push]);
 
-  const getTokens = (item: PromptHistory) => {
-    if (item.tokens && item.tokens.length) return item.tokens;
-    return splitPrompt(item.content, joinMode);
-  };
+  const getTokens = (item: PromptHistory) => getTokensForMode(item, joinMode);
 
   const restore = async (item: PromptHistory) => {
     const tokens = getTokens(item);
@@ -53,9 +59,9 @@ export default function HistoryPage() {
       <CardHeader>
         <CardTitle>История версий</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {history.map((item) => (
-          <div key={item.id} className="space-y-3 rounded-lg border border-ink/10 bg-white/70 p-4">
+          <div key={item.id} className="space-y-2 rounded-lg border border-ink/10 bg-white/70 p-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <p className="text-sm font-semibold text-ink">{new Date(item.createdAt).toLocaleString()}</p>
@@ -90,4 +96,9 @@ export default function HistoryPage() {
       </CardContent>
     </Card>
   );
+}
+
+function getTokensForMode(item: PromptHistory, joinMode: JoinMode) {
+  if (item.tokens && item.tokens.length) return item.tokens;
+  return splitPrompt(item.content, joinMode);
 }
